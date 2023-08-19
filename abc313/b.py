@@ -1,21 +1,9 @@
-N, M = map(int, input().split(" "))
-A = []
-B = []
-
-for i in range(M):
-	a, b = map(int, input().split(" "))
-
-	A.append(a)
-	B.append(b)
-
-
-
-graf = [[0] * N for i in range(N)]
-
-for i in range(M):
-	graf[A[i] - 1][B[i] - 1] = 1
-
-print(graf)
-
-
-
+N, M = map(int, input().split())
+s = set()
+for _ in range(M):
+	a, b = map(int, input().split())
+	s.add(b)
+if len(s) == N - 1:
+	print(N * -~N // 2 - sum(s))
+else:
+	print(-1)
