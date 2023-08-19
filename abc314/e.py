@@ -6,25 +6,20 @@ import bisect
 import copy
 import itertools
 
-N, M = map(int, input().split(" "))
-C = []
-P = []
-S = []
+N, M = map(int, input().split())
+r = [list(map(int, input().split())) for _ in range(N)]
 
-for i in range(N):
-	buf = list(map(int, input().split(" ")))
-	C.append(buf[0])
-	P.append(buf[1])
-	S.append(buf[2:])
+z = [r[i].count(0) for i in range(N)]
+dp = [0] * (M + 1)
 
-costpers = []
-
-for i, s in enumerate(S):
-	print(s)
-	avg = sum(s) / len(s)
-	costpers.append(avg / C[i])
-
-COSTPER = sum(costpers) / len(costpers)
-
-print(COSTPER)
-print(M / COSTPER)
+for i in range(M - 1, -1, -1):
+	mn = float('inf')
+	for j in range(N):
+		c, p, *S = r[j]
+		ret = c
+		for s in S:
+			ret += dp[min(i + s, M)] / p
+		ret *= p / (p - z[j])
+		mn = min(mn, ret)
+	dp[i] = mn
+print(dp[0])

@@ -4,6 +4,7 @@ import sys
 import collections
 import bisect
 import copy
+import itertools
 
 N = int(input())
 S = input()
