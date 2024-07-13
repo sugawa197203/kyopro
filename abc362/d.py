@@ -22,7 +22,7 @@ def dijkstra(N:int, G:list[list[int,int]], s:int) -> list[float]:
 		if dist[v] < c:
 			continue
 		for t, cost in G[v]:
-			if dist[v] + cost + A[v] < dist[t]:
+			if dist[v] + cost + A[t] < dist[t]:
 				dist[t] = dist[v] + cost + A[t]
 				heapq.heappush(que, (dist[t], t))
 	return dist
