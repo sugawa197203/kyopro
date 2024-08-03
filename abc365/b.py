@@ -1,0 +1,5 @@
+N = int(input())
+A = list(map(int, input().split()))
+_A = A.copy()
+_A.sort(reverse=True)
+print(A.index(_A[1]) + 1)
