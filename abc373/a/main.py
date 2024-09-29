@@ -8,4 +8,4 @@ for i in range(12):
         s += 1
 
 print(s)
-
+debug(s)
