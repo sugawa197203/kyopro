@@ -2,5 +2,6 @@
     "files.associations": {
         ".aliases": "shellscript",
         "iostream": "cpp"
-    }
+    },
+    "editor.fontSize": 16
 }
