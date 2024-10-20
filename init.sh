@@ -28,5 +28,5 @@ curl -sSf https://rye.astral.sh/get | bash
 # rye add PuLP==2.7.0
 # rye add networkx==3.0
 
-# npm install -g atcoder-cli
-# pip3 install online-judge-tools
+npm install -g atcoder-cli
+pip install online-judge-tools -y
