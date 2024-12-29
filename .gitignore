@@ -3,3 +3,4 @@ tester/
 .env
 test
 tests
+__pycache__
