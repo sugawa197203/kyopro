@@ -13,7 +13,7 @@ if "%1"=="abc" (
 	)
 
 	mkdir abc%2
-	copy template\* abc%2
+	copy template\abc\* abc%2
 	chdir abc%2
 	exit /b
 )
