@@ -16,6 +16,7 @@ if "%1"=="abc" (
 	copy template\abc\python\* abc%2
 	chdir abc%2
     uv init .
+	uv add numpy
     uv sync
 	exit /b
 )
