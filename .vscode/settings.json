@@ -4,5 +4,6 @@
         "iostream": "cpp",
         "cstdio": "c"
     },
-    "editor.fontSize": 16
+    "editor.fontSize": 16,
+    "python-envs.pythonProjects": []
 }
