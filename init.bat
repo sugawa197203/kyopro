@@ -17,6 +17,7 @@ if "%1"=="abc" (
 	chdir abc%2
     uv init .
 	uv add numpy
+	uv add sortedcontainers
     uv sync
 	exit /b
 )
