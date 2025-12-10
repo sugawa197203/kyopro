@@ -16,8 +16,7 @@ if "%1"=="abc" (
 	copy template\abc\python\* abc%2
 	chdir abc%2
     uv init .
-	uv add numpy
-	uv add sortedcontainers
+	uv add numpy sortedcontainers git+https://github.com/not522/ac-library-python
     uv sync
 	exit /b
 )
