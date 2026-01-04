@@ -1,0 +1,15 @@
+[project]
+name = "abc439"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "ac-library-python",
+    "networkx>=3.6.1",
+    "numpy>=2.4.0",
+    "sortedcontainers>=2.4.0",
+]
+
+[tool.uv.sources]
+ac-library-python = { git = "https://github.com/not522/ac-library-python" }
