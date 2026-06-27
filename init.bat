@@ -18,6 +18,7 @@ if "%1"=="abc" (
     uv init .
 	uv add numpy sortedcontainers git+https://github.com/not522/ac-library-python
     uv sync
+	cmd
 	exit /b
 )else if "%1"=="other" (
 	if "%2"=="" (
@@ -31,5 +32,6 @@ if "%1"=="abc" (
 	uv init .
 	uv add numpy sortedcontainers git+https://github.com/not522/ac-library-python
 	uv sync
+	cmd
 	exit /b
 )
