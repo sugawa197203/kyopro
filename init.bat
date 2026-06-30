@@ -48,5 +48,19 @@ if "%1"=="abc" (
 	uv sync
 	cmd
 	exit /b
+)else if "%1"=="arc" (
+	if "%2"=="" (
+		echo Usage: %0 filename
+		exit /b
+	)
+
+	mkdir -p arc\%2
+	copy template\other\* arc\%2
+	chdir arc\%2
+	uv init .
+	uv add numpy sortedcontainers git+https://github.com/not522/ac-library-python
+	uv sync
+	cmd
+	exit /b
 )
 
