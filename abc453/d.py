@@ -1,104 +1,87 @@
 from collections import deque
 H, W = map(int, input().split())
-S = [input() for _ in range(H)]
+S = [list(input()) for _ in range(H)]
 
-direct = {
-    "U": (-1, 0),
-    "D": (1, 0),
-    "L": (0, -1),
-    "R": (0, 1)
-}
+UP = 0
+DOWN = 1
+LEFT = 2
+RIGHT = 3
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+dtype = [UP, DOWN, LEFT, RIGHT]
 
-start = ()
-goal = ()
+outputWatched = [[[False] * 4 for _ in range(W)] for _ in range(H)]
 
-def is_inside(x, y):
-    return 0 <= x < H and 0 <= y < W
-
-def is_valid(x, y):
-    return is_inside(x, y) and S[x][y] != '#'
+q = deque()
+start = None
 
 for i in range(H):
     for j in range(W):
         if S[i][j] == 'S':
             start = (i, j)
-        elif S[i][j] == 'G':
-            goal = (i, j)
+            break
+    if start is not None:
+        break
 
-visited = {} # key (x, y, 出てく方向) value (来た方向) start は None
+class Memo:
+    def __init__(self, dist:str, parent=None):
+        self.parent = parent
+        self.dist = dist
 
-q = deque() # (x, y, 来た方向, 距離)
+start_memo = Memo(dist="")
 
-for from_d, (dx, dy) in direct.items():
-    _next = (start[0] + dx, start[1] + dy)
-    visited[(*start, from_d)] = None
-    if is_valid(*_next):
-        q.append((*_next, from_d, 1))
-        before = (start[0] - dx, start[1] - dy)
-        visited[(*before, from_d)] = None
+def dist_str(d):
+    if d == UP:
+        return 'U'
+    elif d == DOWN:
+        return 'D'
+    elif d == LEFT:
+        return 'L'
+    elif d == RIGHT:
+        return 'R'
 
-print(visited)
-# print(q)
+for d in dtype:
+    outputWatched[start[0]][start[1]][d] = True
+    next_pos = (start[0] + directions[d][0], start[1] + directions[d][1])
+    if 0 <= next_pos[0] < H and 0 <= next_pos[1] < W and S[next_pos[0]][next_pos[1]] != '#':
+        m = Memo(dist=dist_str(d), parent=start_memo)
+        q.append((next_pos[0], next_pos[1], d, m))
 
 while q:
-    print(visited)
-    print(q)
-    input()
-    x, y, from_d, dist = q.popleft()
-    if S[x][y] == "G":
+    x, y, d, memo = q.popleft()
+
+    tile = S[x][y]
+    if tile == '#':
+        continue
+    elif tile == '.':
+        for nd in dtype:
+            if not outputWatched[x][y][nd]:
+                outputWatched[x][y][nd] = True
+                next_pos = (x + directions[nd][0], y + directions[nd][1])
+                if next_pos != (x, y) and 0 <= next_pos[0] < H and 0 <= next_pos[1] < W and S[next_pos[0]][next_pos[1]] != '#':
+                    m = Memo(dist=dist_str(nd), parent=memo)
+                    q.append((next_pos[0], next_pos[1], nd, m))
+    elif tile == 'o':
+        if not outputWatched[x][y][d]:
+            outputWatched[x][y][d] = True
+            next_pos = (x + directions[d][0], y + directions[d][1])
+            if 0 <= next_pos[0] < H and 0 <= next_pos[1] < W and S[next_pos[0]][next_pos[1]] != '#':
+                m = Memo(dist=dist_str(d), parent=memo)
+                q.append((next_pos[0], next_pos[1], d, m))
+    elif tile == 'x':
+        for nd in dtype:
+            if d != nd and not outputWatched[x][y][nd]:
+                outputWatched[x][y][nd] = True
+                next_pos = (x + directions[nd][0], y + directions[nd][1])
+                if next_pos != (x, y) and 0 <= next_pos[0] < H and 0 <= next_pos[1] < W and S[next_pos[0]][next_pos[1]] != '#':
+                    m = Memo(dist=dist_str(nd), parent=memo)
+                    q.append((next_pos[0], next_pos[1], nd, m))
+    elif tile == 'G':
         print("Yes")
         route = []
-        # print(visited)
-        # print((x, y, from_d))
-        _dx, _dy = direct[from_d]
-        x, y = (x - _dx, y - _dy)
-        while (x, y, from_d) in visited:
-            route.append(from_d)
-            from_d = visited[(x, y, from_d)]
-            if from_d is None:
-                break
-            dx, dy = direct[from_d]
-            x -= dx
-            y -= dy
-        route.reverse()
-        # print(dist)
-        print(*route, sep="")
+        while memo.parent is not None:
+            route.append(memo.dist)
+            memo = memo.parent
+        print("".join(reversed(route)))
         exit()
-    
-    if S[x][y] == "#":
-        continue
-    elif S[x][y] == ".":
-        for to_d, (dx, dy) in direct.items():
-            _next = (x + dx, y + dy)
-            if is_valid(*_next) and (x, y, to_d) not in visited:
-                if dist + 1 > 5000000:
-                    continue
-                if (*_next, to_d) in visited:
-                    continue
-                q.append((*_next, to_d, dist + 1))
-                visited[(x, y, to_d)] = from_d
-    elif S[x][y] == "o":
-        dx, dy = direct[from_d]
-        to_d = from_d
-        _next = (x + dx, y + dy)
-        if is_valid(*_next) and (x, y, to_d) not in visited:
-            if dist + 1 > 5000000:
-                continue
-            if (*_next, to_d) in visited:
-                continue
-            q.append((*_next, to_d, dist + 1))
-            visited[(x, y, to_d)] = from_d
-    elif S[x][y] == "x":
-        for to_d, (dx, dy) in direct.items():
-            if to_d == from_d:
-                continue
-            _next = (x + dx, y + dy)
-            if is_valid(*_next) and (x, y, to_d) not in visited:
-                if dist + 1 > 5000000:
-                    continue
-                if (*_next, to_d) in visited:
-                    continue
-                q.append((*_next, to_d, dist + 1))
-                visited[(x, y, to_d)] = from_d
 
 print("No")
